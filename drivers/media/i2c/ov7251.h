@@ -172,7 +172,6 @@ struct ov7251_resolution {
 	int width;
 	int height;
 	int fps;
-	int pix_clk_freq;
 	u32 skip_frames;
 	u16 pixels_per_line;
 	u16 lines_per_frame;
@@ -1179,11 +1178,10 @@ static struct ov7251_reg const ov7251_720p_30fps[] = {
 
 struct ov7251_resolution ov7251_res_preview[] = {
 	{
-		.desc = "ov7251_480P_30fps",
+		.desc = "ov7251_480P_120fps",
 		.width = 640,
 		.height = 480,
-		.fps = 30,
-		.pix_clk_freq = 73,
+		.fps = 120,
 		.used = 0,
 /*		.pixels_per_line = 2048,
 //		.lines_per_frame = 1184, */
@@ -1204,8 +1202,7 @@ struct ov7251_resolution ov7251_res_still[] = {
 		.desc = "ov7251_480P_30fps",
 		.width = 640,
 		.height = 480,
-		.fps = 30,
-		.pix_clk_freq = 73,
+		.fps = 120,
 		.used = 0,
 /*		.pixels_per_line = 2048,
 //		.lines_per_frame = 1184, */
@@ -1228,8 +1225,7 @@ struct ov7251_resolution ov7251_res_video[] = {
 //		.height = 492, */
 		.width = 640,
 		.height = 480,
-		.fps = 30,
-		.pix_clk_freq = 73,
+		.fps = 120,
 		.used = 0,
 /*		.pixels_per_line = 2048,
 //		.lines_per_frame = 1184, */
