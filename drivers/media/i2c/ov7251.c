@@ -327,6 +327,7 @@ static int ov7251_get_intg_factor(struct i2c_client *client,
 
 	dev->vt_pix_clk_freq_mhz = pix_clk_freq_hz;
 	buf->vt_pix_clk_freq_mhz = pix_clk_freq_hz;
+	printk("vt_pix_clk_freq_mhz=%u\n", pix_clk_freq_hz);
 
 	/* get integration time */
 	buf->coarse_integration_time_min = OV7251_COARSE_INTG_TIME_MIN;
@@ -789,13 +790,6 @@ static int ov7251_init(struct v4l2_subdev *sd)
 	return 0;
 }
 
-
-
-
-
-
-
-
 static int power_ctrl(struct v4l2_subdev *sd, bool flag)
 {
 	int ret = -1;
@@ -827,10 +821,6 @@ static int power_ctrl(struct v4l2_subdev *sd, bool flag)
 
 	return ret;
 }
-
-
-
-
 
 static int gpio_ctrl(struct v4l2_subdev *sd, bool flag)
 {
@@ -1190,8 +1180,8 @@ static int ov7251_detect(struct i2c_client *client)
 					OV7251_SC_CMMN_SUB_ID, &high);
 	revision = (u8) high & 0x0f;
 
-	dev_info(&client->dev, "sensor_revision = 0x%x\n", revision);
-	dev_info(&client->dev, "detect ov7251 success\n");
+	dev_warn(&client->dev, "sensor_revision = 0x%x\n", revision);
+	dev_warn(&client->dev, "detect ov7251 success\n");
 	return 0;
 }
 
@@ -1461,6 +1451,7 @@ static int ov7251_s_parm(struct v4l2_subdev *sd,
 		N_RES = N_RES_PREVIEW;
 	}
 	mutex_unlock(&dev->input_lock);
+	printk("dev->run_mode=%u fps=%u\n", dev->run_mode, ov7251_res->fps);
 	return 0;
 }
 
@@ -1931,7 +1922,6 @@ static int init_ov7251(void)
 
 static void exit_ov7251(void)
 {
-
 	i2c_del_driver(&ov7251_driver);
 }
 
