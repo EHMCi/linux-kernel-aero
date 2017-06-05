@@ -250,6 +250,18 @@ static const struct i2c_device_id ov7251_id[] = {
 	{}
 };
 
+#define PLL1_PRE_DIVIDER_REG 0x30B4
+#define PLL1_MULTIPLIER_REG 0x30B3
+#define PLL1_DIVIDER_REG 0x30B1
+#define PLL1_PIX_DIVIDER_REG 0x30B0
+#define PLL1_MIPI_DIVIDER_REG 0x30B5
+
+#define PLL2_PRE_DIVIDER_REG 0x3098
+#define PLL2_MULTIPLIER_REG 0x3099
+#define PLL2_DIVIDER_REG 0x309D
+#define PLL2_SYS_DIVIDER_REG 0x309A
+#define PLL2_ADC_DIVIDER_REG 0x309B
+
 static struct ov7251_reg const ov7251_480P_30fps[] = {
 /*	{OV7251_8BIT, 0x103, 0x1}, */
 	{OV7251_8BIT, 0x100, 0x0},
@@ -267,17 +279,17 @@ static struct ov7251_reg const ov7251_480P_30fps[] = {
 	{OV7251_8BIT, 0x3023, 0x5},
 	{OV7251_8BIT, 0x3037, 0xf0},
 
-	{OV7251_8BIT, 0x3098, 0x4},
-    {OV7251_8BIT, 0x3099, 0x32},
-	{OV7251_8BIT, 0x309a, 0x5},
-	{OV7251_8BIT, 0x309b, 0x4},
-	{OV7251_8BIT, 0x309d, 0x0},
+	{OV7251_8BIT, PLL2_PRE_DIVIDER_REG, 0x4},/* =/2 */
+    {OV7251_8BIT, PLL2_MULTIPLIER_REG, 0x32},/* =*50 */
+	{OV7251_8BIT, PLL2_DIVIDER_REG, 0x0},/* =/1 */
+	{OV7251_8BIT, PLL2_SYS_DIVIDER_REG, 0x5},/* =/10 | sys_clk = ((external_clk / 2) * 50) / 10 */
+	{OV7251_8BIT, PLL2_ADC_DIVIDER_REG, 0x4},/* =/2 | adc_clk = ((external_clk / 2) * 50) / 2 */
 
-	{OV7251_8BIT, 0x30b0, 0xa},
-	{OV7251_8BIT, 0x30b1, 0x1},
-	{OV7251_8BIT, 0x30b3, 0x64},
-	{OV7251_8BIT, 0x30b4, 0x3},
-	{OV7251_8BIT, 0x30b5, 0x5},
+	{OV7251_8BIT, PLL1_PRE_DIVIDER_REG, 0x3},/* =/3 */
+	{OV7251_8BIT, PLL1_MULTIPLIER_REG, 0x64},/* =*100 */
+	{OV7251_8BIT, PLL1_DIVIDER_REG, 0x1},/* =/1 */
+	{OV7251_8BIT, PLL1_PIX_DIVIDER_REG, 0xa},/* =/10 | pix_clk = ((external_clk / 3) * 100) / 10 */
+	{OV7251_8BIT, PLL1_MIPI_DIVIDER_REG, 0x5},/* 0x5 is not valid, only 2 bits are used to it should be 0x1. =/1 | mipi_clk = ((external_clk / 3) * 100) / 1 */
 
 /*tal check */
 	{OV7251_8BIT, 0x3106, 0xda},
@@ -358,7 +370,7 @@ static struct ov7251_reg const ov7251_480P_30fps[] = {
 	{OV7251_8BIT, 0x3837, 0x00},
 	{OV7251_8BIT, 0x3b80, 0x00},
 
-	{OV7251_8BIT, 0x3b81, 0xff}, /*strobe frame pattern */
+	{OV7251_8BIT, 0x3b81, 0xff}, /* strobe frame pattern */
 
 	{OV7251_8BIT, 0x3b82, 0x10},
 	{OV7251_8BIT, 0x3b83, 0x00},

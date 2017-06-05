@@ -300,7 +300,7 @@ static int ov7251_get_intg_factor(struct i2c_client *client,
 	if (info == NULL)
 		return -EINVAL;
 
-	/* pixel clock calculattion */
+	/* pixel clock calculation */
 	ret =  ov7251_read_reg(client, OV7251_8BIT,
 				OV7251_SC_CMMN_PLL_CTRL3, &pre_pll_clk_div);
 	if (ret)
@@ -1761,20 +1761,6 @@ static ssize_t init_store(struct device *dev,
 	return count;
 }
 
-
-#if 0
-static DEVICE_ATTR(value, S_IRUGO,
-		ov_value_show, NULL);
-
-static DEVICE_ATTR(spower, S_IWUSR|S_IWGRP|S_IWOTH,
-		NULL, ov_set_power);
-
-static DEVICE_ATTR(reg, S_IRUGO|S_IWUSR|S_IWGRP|S_IWOTH,
-		ov_get_reg, ov_set_reg);
-
-static DEVICE_ATTR(init, S_IWUSR|S_IWGRP|S_IWOTH,
-		NULL, ov_set_default);
-#endif
 static DEVICE_ATTR_RO(value);
 
 static DEVICE_ATTR_WO(spower);
