@@ -635,6 +635,9 @@ static int ov7251_q_exposure(struct v4l2_subdev *sd, s32 *value)
 err:
 	return ret;
 }
+
+/* TODO: function to set exposure */
+
 struct ov7251_control ov7251_controls[] = {
 	{
 		.qc = {
@@ -1179,100 +1182,13 @@ static int ov7251_detect(struct i2c_client *client)
 	return 0;
 }
 
-#if 0
-static struct workqueue_struct *my_wq;
-
-typedef struct {
-	struct work_struct my_work;
-	struct ov7251_device *dev;
-	struct i2c_client *client;
-	int enable;
-} stream_set_t;
-
-stream_set_t *work1, *work2;
-
-
-int sleep_time = 10000;
-
-static void stream_wq_function(struct work_struct *work)
-{
-	int ret;
-
-	stream_set_t *my_work = (stream_set_t *)work;
-
-	ret = 0;
-	printk("tal i2c my_work \n");
-	if (my_work->enable == 1) {
-		msleep(200);
-	}
-
-	printk("tal i2c my_work after sleep.x %d\n", my_work->enable);
-
-
-	mutex_lock(&my_work->dev->input_lock);
-
-/*	if (my_work->enable == 0)
-//	{
-//		return;
-//	} */
-
-	ret = ov7251_write_reg(my_work->client, OV7251_8BIT, OV7251_SW_STREAM,
-				my_work->enable ? OV7251_START_STREAMING :
-				OV7251_STOP_STREAMING);
-
-	/*todo: adding sleep after start due to potential issues with ae commands might be too early compared to stream-on */
-	msleep(200);
-
-
-/*	printk( "tal i2c my_work: sleeping between on/off for %d ms \n", sleep_time );
-//	usleep_range(sleep_time-500, sleep_time+500);
-//	printk( "tal i2c my_work: done sleeping between on/off for %d ms \n", sleep_time );
-//	sleep_time += 10000;
-
-//	ret = ov7251_write_reg(my_work->client, OV7251_8BIT, OV7251_SW_STREAM,
-//				OV7251_STOP_STREAMING); */
-
-
-	mutex_unlock(&my_work->dev->input_lock);
-
-	kfree((void *)work);
-
-	return;
-}
-bool wq_created = false;
-#endif
 static int ov7251_s_stream(struct v4l2_subdev *sd, int enable)
 {
 	struct ov7251_device *dev = to_ov7251_sensor(sd);
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	int ret = 0;
-/*	u16 high; */
 
 	printk(KERN_ERR "tal test stream called %d\n", enable);
-#if 0
-	if (!wq_created) {
-		my_wq = create_workqueue("stream_queue");
-		wq_created = true;
-	}
-
-	work1 = (stream_set_t *)kmalloc(sizeof(stream_set_t), GFP_KERNEL);
-
-	if (work1) {
-
-		INIT_WORK((struct work_struct *)work1, stream_wq_function);
-
-		work1->dev = dev;
-		work1->enable = enable;
-		work1->client = client;
-
-/*		ret = queue_work( my_wq, (struct work_struct *)work1 ); */
-
-	}
-
-	/*todo flush & close work-queue, probably requires moving to module-level init/close */
-#endif
-/*	ret = ov7251_read_reg(client, OV7251_8BIT,
-//					OV7251_SC_CMMN_CHIP_ID_H, &high); */
 	mutex_lock(&dev->input_lock);
 
 	ret = ov7251_write_reg(client, OV7251_8BIT, OV7251_SW_STREAM,
