@@ -172,6 +172,8 @@
 #define AEC_AGC_ADJ_10_8_REG 0x350A
 #define AEC_AGC_ADJ_7_0_REG 0x350B
 
+#define SB_SRB_CTRL_REG 0x3106
+
 struct ov7251_resolution {
 	u8 *desc;
 	const struct ov7251_reg *regs;
@@ -292,8 +294,8 @@ static struct ov7251_reg const ov7251_480P_30fps[] = {
 	{OV7251_8BIT, PLL1_PIX_DIVIDER_REG, 0xa},/* =/10 | pix_clk = ((external_clk / 3) * 100) / 10 */
 	{OV7251_8BIT, PLL1_MIPI_DIVIDER_REG, 0x5},/* 0x5 is not valid, only 2 bits are used to it should be 0x1. =/1 | mipi_clk = ((external_clk / 3) * 100) / 1 */
 
-/*tal check */
-	{OV7251_8BIT, 0x3106, 0xda},
+	/* tal check */
+	{OV7251_8BIT, SB_SRB_CTRL_REG, 0xda},
 
 	{OV7251_8BIT, EC_EXPO_19_16_BITS_REG, 0x00},
 	{OV7251_8BIT, EC_EXPO_18_8_BITS_REG, 0x35},
@@ -303,6 +305,7 @@ static struct ov7251_reg const ov7251_480P_30fps[] = {
 	{OV7251_8BIT, AEC_AGC_ADJ_10_8_REG, 0x0},
 	{OV7251_8BIT, AEC_AGC_ADJ_7_0_REG, 0x0},
 
+	/* analog control */
 	{OV7251_8BIT, 0x3600, 0x1c},
 	{OV7251_8BIT, 0x3602, 0x62},
 	{OV7251_8BIT, 0x3620, 0xb7},
@@ -323,6 +326,8 @@ static struct ov7251_reg const ov7251_480P_30fps[] = {
 	{OV7251_8BIT, 0x3673, 0x1},
 	{OV7251_8BIT, 0x3674, 0xff},
 	{OV7251_8BIT, 0x3675, 0x3},
+
+	/* sensor control */
 	{OV7251_8BIT, 0x3705, 0xc1},
 	{OV7251_8BIT, 0x3709, 0x40},
 	{OV7251_8BIT, 0x373c, 0x8},
@@ -330,10 +335,10 @@ static struct ov7251_reg const ov7251_480P_30fps[] = {
 	{OV7251_8BIT, 0x3757, 0xb3},
 	{OV7251_8BIT, 0x3788, 0x0},
 
-
 	{OV7251_8BIT, 0x37a8, 0x01},
 	{OV7251_8BIT, 0x37a9, 0xc0},
 
+	/* timing control */
 	{OV7251_8BIT, 0x3800, 0x00},
 	{OV7251_8BIT, 0x3801, 0x4}, /* H crop start: */
 	{OV7251_8BIT, 0x3802, 0x00},
@@ -360,7 +365,7 @@ static struct ov7251_reg const ov7251_480P_30fps[] = {
 	{OV7251_8BIT, 0x3814, 0x11},
 	{OV7251_8BIT, 0x3815, 0x11},
 
-/*      Ziv Start */
+	/* Ziv Start */
 	{OV7251_8BIT, 0x3820, 0x40},
 	{OV7251_8BIT, 0x3821, 0x00},
 	{OV7251_8BIT, 0x382f, 0x0e},
@@ -432,9 +437,7 @@ static struct ov7251_reg const ov7251_480P_30fps[] = {
 	{OV7251_8BIT, 0x5000, 0x85}, /* ISP CRTL00 */
 	{OV7251_8BIT, 0x5001, 0x80}, /* ISP CRTL01 */
 
-/*	Ziv End
-
-//	{OV7251_8BIT, 0x5E00, 0x8C}, // test pattern, remove */
+	/*	Ziv End */
 
 	{OV7251_TOK_TERM, 0, 0},
 };
