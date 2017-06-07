@@ -239,6 +239,15 @@ static struct v4l2_queryctrl ci_v4l2_controls[] = {
 		.default_value = 0,
 	},
 	{
+		.id = V4L2_CID_EXPOSURE_ABSOLUTE,
+		.type = V4L2_CTRL_TYPE_INTEGER,
+		.name = "exposure absolute",
+		.minimum = -4,
+		.maximum = 4,
+		.step = 1,
+		.default_value = 0,
+	},
+	{
 		.id = V4L2_CID_EXPOSURE_ZONE_NUM,
 		.type = V4L2_CTRL_TYPE_INTEGER,
 		.name = "one-time exposure zone number",
@@ -2221,15 +2230,20 @@ static int atomisp_g_ctrl(struct file *file, void *fh,
 	struct atomisp_device *isp = video_get_drvdata(vdev);
 	int i, ret = -EINVAL;
 
+	printk("atomisp_g_ctrl()\n");
+
 	for (i = 0; i < ctrls_num; i++) {
-		if (ci_v4l2_controls[i].id == control->id) {
+		if (ci_v4l2_controls[i].id == control->id || control->id == V4L2_CID_EXPOSURE_ABSOLUTE) {
 			ret = 0;
+			printk("\tfound in atomisp\n");
 			break;
 		}
 	}
 
-	if (ret)
+	if (ret) {
+		printk("\tnot found in atomisp\n");
 		return ret;
+	}
 
 	rt_mutex_lock(&isp->mutex);
 
@@ -2314,6 +2328,7 @@ static int atomisp_s_ctrl(struct file *file, void *fh,
 	switch (control->id) {
 	case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
 	case V4L2_CID_EXPOSURE:
+	case V4L2_CID_EXPOSURE_ABSOLUTE:
 	case V4L2_CID_HFLIP:
 	case V4L2_CID_VFLIP:
 	case V4L2_CID_EXPOSURE_AUTO:
