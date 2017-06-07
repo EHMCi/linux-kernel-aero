@@ -283,13 +283,13 @@ static struct ov7251_reg const ov7251_480P_30fps[] = {
 	{OV7251_8BIT, 0x3037, 0xf0},
 
 	{OV7251_8BIT, PLL2_PRE_DIVIDER_REG, 0x2},/* =/1 */
-    {OV7251_8BIT, PLL2_MULTIPLIER_REG, 0x37},/* =*50 */
+	{OV7251_8BIT, PLL2_MULTIPLIER_REG, 0x4B},/* =*75 */
 	{OV7251_8BIT, PLL2_DIVIDER_REG, 0x0},/* =/1 */
-	{OV7251_8BIT, PLL2_SYS_DIVIDER_REG, 0x5},/* =/10 | sys_clk = ((external_clk / 1) * 50) / 10 */
-	{OV7251_8BIT, PLL2_ADC_DIVIDER_REG, 0x4},/* =/2 | adc_clk = ((external_clk / 1) * 50) / 2 */
+	{OV7251_8BIT, PLL2_SYS_DIVIDER_REG, 0x5},/* =/10 | sys_clk = ((external_clk / 1) * 75) / 10 */
+	{OV7251_8BIT, PLL2_ADC_DIVIDER_REG, 0x4},/* =/2 | adc_clk = ((external_clk / 1) * 75) / 2 */
 
 	{OV7251_8BIT, PLL1_PRE_DIVIDER_REG, 0x2},/* =/2 */
-	{OV7251_8BIT, PLL1_MULTIPLIER_REG, 0x6E},/* =*100 */
+	{OV7251_8BIT, PLL1_MULTIPLIER_REG, 0x64},/* =*100 */
 	{OV7251_8BIT, PLL1_DIVIDER_REG, 0x1},/* =/1 */
 	{OV7251_8BIT, PLL1_PIX_DIVIDER_REG, 0xa},/* =/10 | pix_clk = ((external_clk / 2) * 100) / 10 */
 	{OV7251_8BIT, PLL1_MIPI_DIVIDER_REG, 0x5},/* 0x5 is not valid, only 2 bits are used to it should be 0x1. =/1 | mipi_clk = ((external_clk / 2) * 100) / 1 */
